@@ -6,8 +6,16 @@ const TARGET_URL = 'https://www.booking.com/hotel/it/villaggio-i-sorbizzi-resort
 
 const code = `
   export default async function ({ page }) {
-    await page.goto('${TARGET_URL}', { waitUntil: 'domcontentloaded' });
+    // User-Agent setzen (ähnlich wie dein Puppeteer-Code)
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36');
 
+    // Seite laden und warten, bis DOM geladen ist
+    await page.goto('${TARGET_URL}', { waitUntil: 'domcontentloaded', timeout: 30000 });
+
+    // Warten auf ein spezifisches wichtiges Element, wie in deinem Puppeteer-Code
+    await page.waitForSelector('[data-capla-component-boundary*="PropertyHeaderName"] h2.pp-header__title', { timeout: 20000 });
+
+    // Deine Scraper-Funktionen bleiben gleich
     const getName = () => {
       const wrapper = document.querySelector('[data-capla-component-boundary*="PropertyHeaderName"]');
       if (!wrapper) return null;
@@ -65,9 +73,7 @@ async function scrape() {
       `https://production-sfo.browserless.io/function?token=${BROWSERLESS_API_KEY}`,
       { code },
       {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' }
       }
     );
 
