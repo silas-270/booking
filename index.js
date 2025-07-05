@@ -154,26 +154,12 @@ app.post('/api/scrape', async (req, res) => {
 
         await browser.close();
 
-        insertJson(testData)
-            .then(() => console.log("Fertig ✅"))
-            .catch(err => console.error("Fehler ❌", err));
-
         const formatted = formatData(data);
         res.json({ ...formatted, url });
     } catch (error) {
         console.error('Scraping failed:', error);
         res.status(500).json({ error: 'Failed to scrape data.' });
     }
-});
-
-app.get('/items', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM items ORDER BY inserted_at DESC');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Fehler beim Abrufen der Daten' });
-  }
 });
 
 app.listen(PORT, () => {
