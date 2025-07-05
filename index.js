@@ -12,8 +12,7 @@ async function scrapePage(url) {
         url: url,
         elements: [
           {
-            selector: 'h1', // Beispiel: Alle <h1>-Elemente extrahieren
-            type: 'text'
+            selector: 'h1' // Nur selector erlaubt, kein „type“
           }
         ]
       }
