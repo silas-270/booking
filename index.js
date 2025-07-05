@@ -7,18 +7,24 @@ const TARGET_URL = 'https://example.com';
 async function scrapePage(url) {
   try {
     const response = await axios.post(
-      `https://chrome.browserless.io/content?token=${BROWSERLESS_API_KEY}`,
+      `https://production-sfo.browserless.io/scrape?token=${BROWSERLESS_API_KEY}`,
       {
         url: url,
-        options: {
-          waitUntil: 'networkidle0',
-        },
+        elements: [
+          {
+            selector: 'h1', // Beispiel: Alle <h1>-Elemente extrahieren
+            type: 'text'
+          }
+        ]
       }
     );
 
-    console.log('Seiteninhalt:', response.data);
+    console.log('Scrape-Ergebnis:', response.data);
   } catch (error) {
-    console.error('Fehler beim Scrapen:', error.response ? error.response.data : error.message);
+    console.error(
+      'Fehler beim Scrapen:',
+      error.response?.data || error.message
+    );
   }
 }
 
