@@ -4,6 +4,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
+import fs from 'fs';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,6 +31,23 @@ const isValidBookingUrl = (url) => {
     } catch {
         return false;
     }
+};
+
+const findChrome = () => {
+  const candidates = [
+    process.env.CHROMIUM_PATH,
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
+    '/snap/bin/chromium'
+  ].filter(Boolean);
+
+  for (const p of candidates) {
+    if (fs.existsSync(p)) {
+      console.log(`→ Using Chrome executable at ${p}`);
+      return p;
+    }
+  }
+  throw new Error('Cannot find Chromium executable. Checked: ' + candidates.join(', '));
 };
 
 // Format data
@@ -90,7 +108,7 @@ app.post('/api/scrape', async (req, res) => {
     try {
         const browser = await puppeteer.launch({
             headless: 'new',
-            executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium',
+            executablePath: findChrome(),
             args: [
                 '--no-sandbox', 
                 '--disable-setuid-sandbox'
