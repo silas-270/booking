@@ -4,7 +4,7 @@
   "description": "Ein einfaches Beispiel zum Scrapen mit browserless.io",
   "main": "scraper.js",
   "scripts": {
-    "start": "node scraper.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "axios": "^1.6.8"
