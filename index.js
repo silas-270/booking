@@ -5,8 +5,8 @@ const BROWSERLESS_API_KEY = '2SclztNmn8H0MGYe1da02f8057fd6d214c5c2e807a0518de9';
 const TARGET_URL = 'https://www.booking.com/hotel/it/villaggio-i-sorbizzi-resort.de.html?aid=304142&label=gen173nr-1FCAEoggI46AdIM1gEaDuIAQGYAQe4ARfIAQ_YAQHoAQH4AQyIAgGoAgO4Atm8n8MGwAIB0gIkZWQ0ODM3NTYtZTM3ZS00NDlmLTg0ZjctMGE2MDljZDg4OWUy2AIG4AIB&sid=f382a5831818c1661cd5dee1516313a6&all_sr_blocks=8992319_89994196_4_2_0_244229%2C8992319_89994196_2_2_0_244229&checkin=2025-09-11&checkout=2025-09-19&dest_id=-128916&dest_type=city&dist=0&group_adults=6&group_children=0&hapos=6&highlighted_blocks=8992319_89994196_4_2_0_244229%2C8992319_89994196_2_2_0_244229&hpos=6&matching_block_id=8992319_89994196_4_2_0_244229&nflt=sth%3D19&no_rooms=1&req_adults=6&req_children=0&room1=A%2CA%2CA%2CA%2CA%2CA&sb_price_type=total&sr_order=popularity&sr_pri_blocks=8992319_89994196_4_2_0_244229_246400%2C8992319_89994196_2_2_0_244229_196000&srepoch=1751710337&srpvid=3a596719872b01dd&type=total&ucfs=1&';
 
 const code = `
-  async (page) => {
-    await page.goto('${TARGET_URL}', { waitUntil: 'networkidle0' });
+  export default async function ({ page }) {
+    await page.goto('${TARGET_URL}', { waitUntil: 'domcontentloaded' });
 
     const getName = () => {
       const wrapper = document.querySelector('[data-capla-component-boundary*="PropertyHeaderName"]');
