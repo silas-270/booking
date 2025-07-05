@@ -1,9 +1,36 @@
 import 'dotenv/config';
 import express from 'express';
 import puppeteer from 'puppeteer-core';
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import helmet from 'helmet';
 import cors from 'cors';
+import pkg from 'pg';
+
+const { Pool } = pkg;
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // Für Railway nötig
+  },
+});
+
+const createTableIfNotExists = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS scraped_data (
+      id SERIAL PRIMARY KEY,
+      name TEXT,
+      location TEXT,
+      price INTEGER,
+      rating REAL,
+      images JSONB,
+      url TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+};
+
+createTableIfNotExists().catch(console.error);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -132,6 +159,24 @@ app.post('/api/scrape', async (req, res) => {
     await browser.close();
 
     const formatted = formatData(data);
+
+    try {
+      await pool.query(
+        `INSERT INTO scraped_data (name, location, price, rating, images, url) 
+     VALUES ($1, $2, $3, $4, $5, $6)`,
+        [
+          formatted.name,
+          formatted.location,
+          formatted.price,
+          formatted.rating,
+          JSON.stringify(formatted.images),
+          url
+        ]
+      );
+    } catch (dbError) {
+      console.error('Database insert failed:', dbError);
+    }
+    
     res.json({ ...formatted, url });
   } catch (error) {
     console.error('Scraping failed:', error);
