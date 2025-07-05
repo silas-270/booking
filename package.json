@@ -1,23 +1,30 @@
 {
-  "name": "booking-factsheet-api",
+  "name": "booking-browserless-api",
   "version": "1.0.0",
-  "description": "API zum Extrahieren eines Factsheets von Booking.com URLs",
+  "description": "API zum Extrahieren eines Factsheets von Booking.com URLs über Browserless.io",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node -r dotenv/config index.js"
   },
   "author": "Dein Name",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "^4.19.2",
-    "express-rate-limit": "^7.0.0",
     "helmet": "^7.1.0",
     "puppeteer-core": "^21.6.0",
     "puppeteer-extra": "^3.3.4",
     "puppeteer-extra-plugin-stealth": "^2.11.1"
   },
   "devDependencies": {},
-  "keywords": []
+  "keywords": [
+    "booking.com",
+    "scraper",
+    "puppeteer-core",
+    "puppeteer-extra",
+    "browserless",
+    "factsheet"
+  ]
 }
