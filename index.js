@@ -1,7 +1,7 @@
 // scraper.js
 const axios = require('axios');
 
-const BROWSERLESS_API_KEY = 'YOUR_BROWSERLESS_API_KEY'; // Ersetze dies mit deinem echten API-Schlüssel
+const BROWSERLESS_API_KEY = '2SclztNmn8H0MGYe1da02f8057fd6d214c5c2e807a0518de9'; // Ersetze dies mit deinem echten API-Schlüssel
 const TARGET_URL = 'https://example.com';
 
 async function scrapePage(url) {
