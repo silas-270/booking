@@ -176,11 +176,21 @@ app.post('/api/scrape', async (req, res) => {
     } catch (dbError) {
       console.error('Database insert failed:', dbError);
     }
-    
+
     res.json({ ...formatted, url });
   } catch (error) {
     console.error('Scraping failed:', error);
     res.status(500).json({ error: 'Failed to scrape data.' });
+  }
+});
+
+app.get('/api/data', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM scraped_data ORDER BY created_at DESC');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Failed to fetch data from database:', error);
+    res.status(500).json({ error: 'Failed to retrieve data.' });
   }
 });
 
