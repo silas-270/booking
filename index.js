@@ -7,7 +7,7 @@ import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const insertJson = require('./insertJson');
+//const insertJson = require('./insertJson');
 
 // Middleware
 app.use(helmet());
