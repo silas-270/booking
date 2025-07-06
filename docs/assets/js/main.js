@@ -3,6 +3,18 @@
  */
 const API_URL = "https://booking-production-3ae3.up.railway.app";
 
+const SVG_UP = `
+<svg fill="currentColor" width="16" height="16" viewBox="0 0 20 20"
+     xmlns="http://www.w3.org/2000/svg">
+  <path d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Z"/>
+</svg>`;
+
+const SVG_DOWN = `
+<svg fill="currentColor" width="16" height="16" viewBox="0 0 20 20"
+     xmlns="http://www.w3.org/2000/svg">
+  <path d="M10 1c.072 0 .145 0 .218.006A4.1 4.1 0 0 1 14 5.184V9h3.138a1.751 1.751 0 0 1 1.234 2.993L10.59 19.72a.836.836 0 0 1-1.18 0l-7.782-7.727A1.751 1.751 0 0 1 2.861 9H6V5.118a4.134 4.134 0 0 1 .854-2.592A3.99 3.99 0 0 1 10 1Z"/>
+</svg>`;
+
 // ——————————————————————————————
 // Globale Fullscreen‑Modal‑Galerie
 // ——————————————————————————————
@@ -59,7 +71,7 @@ function openGallery(images, startIdx = 0) {
 
 
 class Accommodation {
-    constructor({ id, name, location, price, rating, images, url }) {
+    constructor({ id, name, location, price, rating, images, url, votes = 0, voteState = 0 }) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -67,6 +79,8 @@ class Accommodation {
         this.rating = rating;
         this.images = images;
         this.url = url;
+        this.votes = votes;        // aktuelle Stimmezahl
+        this.voteState = voteState; // 1 = up, -1 = down, 0 = neutral
 
         // ← NEU: Bilder vorladen, damit beim Switchen nicht geflackert wird
         if (Array.isArray(images)) {
@@ -165,6 +179,67 @@ class Accommodation {
       </div>
     `;
         card.appendChild(info);
+
+        // ───── Vote‑Box ─────
+        const voteBox = document.createElement('div');
+        voteBox.className = 'vote-box';
+
+        const upBtn = document.createElement('button');
+        upBtn.className = 'vote-btn vote-up';
+        upBtn.innerHTML = SVG_UP;
+
+        const countEl = document.createElement('span');
+        countEl.className = 'vote-count';
+        countEl.textContent = this.votes;
+
+        const divider = document.createElement('span');
+        divider.className = 'vote-divider';
+
+        const downBtn = document.createElement('button');
+        downBtn.className = 'vote-btn vote-down';
+        downBtn.innerHTML = SVG_DOWN;
+
+        voteBox.append(upBtn, countEl, divider, downBtn);
+        card.appendChild(voteBox);
+
+        // ───── Logik & State‑Machine ─────
+        const updateVoteUI = () => {
+            countEl.textContent = this.votes;
+            upBtn.classList.toggle('active', this.voteState === 1);
+            downBtn.classList.toggle('active', this.voteState === -1);
+        };
+        updateVoteUI();
+
+        upBtn.addEventListener('click', () => {
+            if (this.voteState === 1) {          // Up war aktiv → neutral
+                this.voteState = 0;
+                this.votes -= 1;
+            } else if (this.voteState === 0) {   // neutral → Up
+                this.voteState = 1;
+                this.votes += 1;
+            } else {                             // Down aktiv → Up
+                this.voteState = 1;
+                this.votes += 2;
+            }
+            updateVoteUI();
+            // TODO: fetch('/api/vote', …) sobald Backend bereit ist
+        });
+
+        downBtn.addEventListener('click', () => {
+            if (this.voteState === -1) {         // Down war aktiv → neutral
+                this.voteState = 0;
+                this.votes += 1;
+            } else if (this.voteState === 0) {   // neutral → Down
+                this.voteState = -1;
+                this.votes -= 1;
+            } else {                             // Up aktiv → Down
+                this.voteState = -1;
+                this.votes -= 2;
+            }
+            updateVoteUI();
+            // TODO: fetch('/api/vote', …)
+        });
+
 
         return card;
     }

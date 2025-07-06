@@ -49,7 +49,7 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;          /* sorgt dafür, dass Cards nicht gestreckt werden */
-    gap: 16px;
+    gap: 18px;
 }
 
 /* Link-Farbe in den Karten-Überschriften überschreiben */
@@ -67,13 +67,17 @@ h1 {
 .card {
     width: 100%;
     max-width: 360px;
-    min-width: 0;                 /* feste Breite */
-    background: #ececec;          /* hellgrau */
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    overflow: hidden;
+    background: #ececec;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    overflow: visible;
+
+    aspect-ratio: 3 / 2.6;
+    flex: 0 0 auto;
+    
     display: flex;
     flex-direction: column;
+    position: relative;   
 }
 
 /* Bilder-Container */
@@ -83,7 +87,7 @@ h1 {
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background: #ddd;
-    border-radius: 8px 8px 0 0;
+    border-radius: 16px 16px 0 0;
 }
 
 /* Bild-Box (Letterboxing) */
@@ -145,7 +149,6 @@ h1 {
     padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
 }
 
 /* Erste Zeile: Name + Preis */
@@ -201,7 +204,7 @@ h1 {
   max-height: 90%;
   object-fit: contain;
   z-index: 55;
-  border-radius: 8px;
+  border-radius: 16px;
 }
 
 /* Pfeile & Close */
@@ -237,4 +240,66 @@ h1 {
   right: 4%;
   top: 50%;
   transform: translateY(-50%);
+}
+
+
+/* VOTING UI */
+.vote-box {
+    position: absolute;
+    left: 12px;
+    bottom: 0;
+    transform: translateY(50%);
+
+    display: flex;
+    align-items: center;
+    gap: 4px;                     /* kleineres Gap */
+    background: #e0e0e0;
+    border-radius: 8px;
+    padding: 4px 4px;             /* schmalere Polsterung */
+    line-height: 1;
+    user-select: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    font-size: 0.7rem;            /* ~2/3 der vorigen 0.9 rem */
+    color: #666;                  /* einheitliche Text/SVG‑Farbe */
+}
+
+/* Pfeil‑Buttons */
+.vote-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* SVG‑Icons: Outline (inactive) → Fill (active) */
+.vote-btn svg {
+    width: 11px;                  /* 16 px → 11 px (~2/3) */
+    height: 11px;
+    fill: none;                   /* Outline */
+    stroke: currentColor;
+    stroke-width: 1.5px;
+    pointer-events: none;
+}
+
+.vote-btn.active svg {
+    fill: currentColor;           /* Fill */
+    stroke: currentColor;
+}
+
+/* Stimmenzahl */
+.vote-count {
+    min-width: 16px;              /* 24 px → 16 px */
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Trennstrich */
+.vote-divider {
+    width: 1px;
+    height: 50%;                  /* etwas kürzer */
+    background: #bdbdbd;
 }
