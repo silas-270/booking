@@ -1,0 +1,54 @@
+/* Galerie-Modal */
+.gallery-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+.gallery-modal.open {
+  display: flex;
+}
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+}
+.gallery-img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  z-index: 55;
+  border-radius: 16px;
+}
+.gallery-prev,
+.gallery-next,
+.gallery-close {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  font-size: 2rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  z-index: 60;
+  user-select: none;
+}
+.gallery-close {
+  top: 16px;
+  right: 16px;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+.gallery-prev {
+  left: 4%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.gallery-next {
+  right: 4%;
+  top: 50%;
+  transform: translateY(-50%);
+}
