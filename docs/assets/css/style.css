@@ -43,11 +43,9 @@ h1 {
 }
 
 /* Karten-Container */
-#card-container {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.accommodation-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
   gap: 18px;
+  padding: 20px;
 }
