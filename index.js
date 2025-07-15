@@ -16,12 +16,56 @@ initializeDatabase().catch(err => {
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
 
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
 // API-Routen
+app.get('/api/images', async (req, res) => {
+  const query = req.query.q;
+  const index = parseInt(req.query.index, 10) || 1; // Default auf Seite 1, falls nicht angegeben
+
+  if (!query) {
+    return res.status(400).json({ error: 'Missing query parameter "q"' });
+  }
+
+  try {
+    const perPage = 10;
+    const response = await fetch(
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=${perPage}&page=${index}&client_id=${UNSPLASH_ACCESS_KEY}`
+    );
+
+    if (!response.ok) {
+      throw new Error(`Unsplash API error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    const CROP_WIDTH  = 1200;
+    const CROP_HEIGHT = 900;
+
+    const images = data.results.map((item) => {
+      const url = new URL(item.urls.raw);
+      url.searchParams.set('fit', 'crop');
+      url.searchParams.set('crop', 'entropy');
+      url.searchParams.set('w', CROP_WIDTH);
+      url.searchParams.set('h', CROP_HEIGHT);
+
+      return {
+        alt: item.alt_description || 'Unsplash Image',
+        src: url.toString(),
+      };
+    });
+
+    res.json(images);
+  } catch (error) {
+    console.error('Error fetching from Unsplash:', error.message);
+    res.status(500).json({ error: 'Error fetching images' });
+  }
+});
+
 app.post('/workspaces', async (req, res) => {
   const { name, ownerId } = req.body;
   try {
@@ -126,7 +170,6 @@ app.get('/workspaces/:workspaceId/cards', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch cards' });
   }
 });
-
 
 app.listen(PORT, () => {
   console.log(`Server läuft auf Port ${PORT}`);

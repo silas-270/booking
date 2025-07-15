@@ -1,4 +1,5 @@
 import { renderAccommodationView } from './views/accommodationView.js';
+import { renderWorkspaceView } from './views/workspaceView.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const app = document.getElementById('app');
@@ -7,8 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const WORKSPACE_ID = '2b059a79-2911-4ec9-899d-59dd1b01f582'; // Später dynamisch
+    // Temporäre Logik zum Laden der Views
+    const viewIndex = 0;
 
-    const view = renderAccommodationView(WORKSPACE_ID);
+    let view;
+    if (viewIndex === 0) {
+      view = renderAccommodationView();
+    } else if (viewIndex === 1) {
+      view =  renderWorkspaceView();
+    }
+
     app.appendChild(view);
 });

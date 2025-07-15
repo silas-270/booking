@@ -1,0 +1,91 @@
+/* Voting-UI */
+.vote-box {
+  margin-left: 12px;
+  margin-bottom: 12px;
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  background: #ececec;
+  border-radius: 8px;
+  padding: 4px 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  font-size: 0.7rem;
+  color: #444;
+  user-select: none;
+}
+
+.vote-btn {
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  padding: 0 2px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.vote-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2px;
+  pointer-events: none;
+  transition: color 0.2s ease, fill 0.2s ease;
+}
+
+.vote-btn.vote-up:hover svg {
+  color: #2a9d8f;
+}
+
+.vote-btn.vote-down:hover svg {
+  color: #e07a7a;
+}
+
+.vote-btn.vote-up.active svg {
+  color: #2a9d8f;
+  fill: #2a9d8f;
+}
+
+.vote-btn.vote-down.active svg {
+  color: #e07a7a;
+  fill: #e07a7a;
+}
+
+.vote-count {
+  min-width: 16px;
+  margin: 0 4px;
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+}
+
+.vote-divider {
+  width: 1px;
+  height: 75%;
+  margin: 0 4px;
+  background: #aaa;
+  border-radius: 1px;
+}
+
+/* Animation auf das SVG anwenden, sobald die Klasse .pop gesetzt wird */
+.vote-btn.pop svg {
+  animation: vote-pop 240ms cubic-bezier(.34,1.56,.64,1);   /* leicht federnde Kurve */
+  transform-origin: center;                                 /* Pop um die Mitte */
+}
+
+/* Fein‑Tuning: während der Animation Pointer‑Events ausschalten,
+   damit mehrfaches Klicken den Effekt nicht stört */
+.vote-btn.pop {
+  pointer-events: none;
+}
+
+/* Pop‑Animation --- */
+@keyframes vote-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.85); }   /* erst etwas kleiner */
+  70%  { transform: scale(1.15); }   /* dann kurz größer */
+  100% { transform: scale(1); }
+}

@@ -1,51 +1,11 @@
-/* Grundstyles */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
+  font-family: 'Nunito', sans-serif;
   line-height: 1.4;
   background: #f5f5f5;
 }
 
-/* Überschrift */
-h1 {
-  text-align: center;
-  font-size: 1.8rem;
-  color: #1d3557;
-  margin-bottom: 12px;
-  font-weight: normal;
-}
-
-/* Add-Button */
-#add-card-btn {
-  display: block;
-  margin: 0 auto 20px;
-  background: #2a9d8f;
-  color: #fff;
-  border: none;
-  padding: 6px 12px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-#add-card-btn:hover {
-  background: #21867a;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-/* Karten-Container */
-.accommodation-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
-  gap: 18px;
-  padding: 20px;
+.divider {
+  height: 2px;
+  background-color: #ddd;
+  margin: 0 20px;
 }

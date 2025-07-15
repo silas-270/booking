@@ -1,4 +1,4 @@
-import { CONFIG } from "../config.js";
+import { CONFIG } from '../config.js';
 
 /**
  * 1. Workspace erstellen
@@ -56,4 +56,37 @@ export async function getUserWorkspaces(userId) {
 export async function getCardsForWorkspace(workspaceId, userId) {
   const response = await fetch(`${CONFIG.API_URL}/workspaces/${workspaceId}/cards?userId=${userId}`);
   return await response.json();
+}
+
+/**
+ * Ruft Bilder vom Backend ab, die über Unsplash gesucht wurden.
+ * @param {string} query - Der Suchbegriff für die Bildersuche.
+ * @param {number} [index=1] - Die Seitennummer für die Paginierung.
+ * @returns {Promise<Array<{ alt: string, src: string }>>} - Eine Liste von Bildern mit `alt` und `src`.
+ * @throws {Error} - Wenn der Abruf fehlschlägt.
+ */
+export async function fetchImages(query, index = 1) {
+  if (!query || typeof query !== 'string') {
+    throw new Error('Ein gültiger Suchbegriff (query) muss übergeben werden.');
+  }
+
+  if (typeof index !== 'number' || index < 1) {
+    throw new Error('Der Parameter "index" muss eine positive Zahl sein.');
+  }
+
+  try {
+    const url = `${CONFIG.API_URL}/api/images?q=${encodeURIComponent(query)}&index=${index}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Unbekannter Fehler beim Abrufen der Bilder');
+    }
+
+    const images = await response.json();
+    return images; // Array mit Objekten { alt, src }
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Bilder:', error);
+    throw error;
+  }
 }

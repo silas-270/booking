@@ -1,0 +1,7 @@
+/* Karten-Container */
+.accommodation-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+  gap: 18px;
+  padding: 20px;
+}

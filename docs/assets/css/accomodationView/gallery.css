@@ -1,0 +1,147 @@
+.swiper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #ddd;
+  border-radius: 16px 16px 0 0;
+}
+
+/* Korrektur hier: Kein justify/align center */
+.swiper-wrapper {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  /* Kein justify-content/align-items, Swiper braucht volle Kontrolle */
+}
+
+.swiper-slide {
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0; /* Verhindert „Schrumpfen“ */
+}
+
+/* Bild korrekt behandeln */
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.swiper-slide img.crop {
+  object-fit: cover;
+}
+
+/* Link-Farbe */
+.accomodation-card__info h2 a {
+  color: #1d3557;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.accomodation-card__info h2 a:hover {
+  color: #457b9d;
+}
+
+/* Karten-Info */
+.accomodation-card__info {
+  padding: 8px 12px 6px;
+}
+.accomodation-card__row1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.accomodation-card__row1 h2 {
+  font-size: 1.4rem;
+  margin: 0;
+  padding: 0;
+}
+.accomodation-card__row1 .price {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #2a9d8f;
+}
+.accomodation-card__row2 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Basis‑Button (wie gehabt) */
+.swiper-button-next,
+.swiper-button-prev {
+  position: absolute;
+  top: 60%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  --icon-top: 50%;
+  --icon-left: 50%;
+  overflow: visible;
+}
+
+.swiper-button-next { right: 12px; }
+.swiper-button-prev { left: 12px; }
+
+/* Icon‑Pseudo‑Element */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  content: '';
+  position: absolute;
+  top: var(--icon-top);
+  left: var(--icon-left);
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid white;
+  border-right: 2px solid white;
+  transform:
+    translate(calc(-50% + var(--icon-offset-x)), calc(-50%))
+    rotate(var(--icon-rotate));
+}
+
+/* Next‑Button individualisieren */
+.swiper-button-next {
+  --icon-offset-x: -3px;
+  --icon-rotate: 45deg;
+}
+
+/* Prev‑Button individualisieren */
+.swiper-button-prev {
+  --icon-offset-x: 3px;
+  --icon-rotate: -135deg;
+}
+
+/* Hover‑Effekt (optional) */
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.swiper-pagination {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+.swiper-pagination.up {
+  margin-bottom: 75px;
+}
+.swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.3);
+  opacity: 1;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+.swiper-pagination-bullet-active {
+  background: white;
+}

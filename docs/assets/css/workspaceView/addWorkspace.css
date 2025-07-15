@@ -1,0 +1,142 @@
+/* 🔲 Hintergrund-Overlay */
+#popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4); /* leicht durchsichtig */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* 🧩 Popup-Container */
+#popup {
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 💡 Inhaltsteil */
+#popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+/* 🖼️ Vorschau */
+#workspace-preview {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ✍️ Eingabefelder (Name & Bild) – Basisstil */
+#workspace-name-input,
+#workspace-image-input {
+  width: 93%;
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.2s;
+  background-color: #f9f9f9;
+}
+
+/* Fokus-Stile */
+#workspace-name-input:focus {
+  border-color: #007aff;
+  background-color: #fff;
+}
+
+#workspace-image-input:focus {
+  border-color: #888;
+}
+
+/* 🧷 Bild-Input-Zeile */
+.image-input-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#workspace-image-input {
+  flex-grow: 1;
+}
+
+/* 🔄 Reload-Button */
+#workspace-image-reload {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: border 0.2s, background-color 0.2s;
+}
+
+#workspace-image-reload:hover {
+  background-color: #f0f0f0;
+  border-color: #888;
+}
+
+#workspace-image-reload:active {
+  background-color: #e6e6e6;
+}
+
+/* 🔘 Button-Container */
+#popup-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* 🔘 Allgemeine Button-Stile */
+#popup-buttons button {
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+#popup-buttons button:active {
+  transform: scale(0.98);
+}
+
+/* ✅ Speichern-Button (erster) */
+#popup-buttons button:first-child {
+  background-color: #007aff;
+  color: white;
+}
+
+#popup-buttons button:first-child:hover {
+  background-color: #005ecb;
+}
+
+/* ❌ Abbrechen-Button (letzter) */
+#popup-buttons button:last-child {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+#popup-buttons button:last-child:hover {
+  background-color: #d0d0d0;
+}
