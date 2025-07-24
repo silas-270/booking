@@ -25,6 +25,37 @@ router.get('/', async (req, res) => {
     }
 });
 
+// GET data from 
+router.get('/:workspaceId', async (req, res) => {
+    const user = await validateToken(req.headers['authorization']);
+    const userId = user.id
+
+    if (!userId) { return res.status(401).json({ error: 'Nicht authentifiziert' }); }
+
+    const { workspaceId } = req.params;
+
+    try {
+        const result = await pool.query(
+            `SELECT id, name, image, owner_id, created_at FROM workspaces WHERE id = $1`,
+            [workspaceId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Workspace nicht gefunden' });
+        }
+
+        const workspace = result.rows[0];
+
+        const access = await checkWorkspaceAccess(userId, workspaceId);
+        if (!access) return res.status(403).json({ error: 'Access denied' });
+
+        return res.json(workspace);
+    } catch (err) {
+        console.error('Fehler beim Laden des Workspace:', err);
+        return res.status(500).json({ error: 'Interner Serverfehler' });
+    }
+});
+
 // POST create new workspace for a user
 router.post('/', async (req, res) => {
     const user = await validateToken(req.headers['authorization']);
@@ -87,4 +118,50 @@ router.delete('/:workspaceId', async (req, res) => {
     }
 });
 
+// POST access to workspace
+router.post('/access', async (req, res) => {
+    const user = await validateToken(req.headers['authorization']);
+    const userId = user.id;
+
+    const { accessLink } = req.body;
+    const workspaceId = accessLink; // Hier kann später noch Logik hin, um Links zu validieren und Ids extrahieren
+
+    if (!userId) {
+        return res.status(401).json({ error: 'Nicht authentifiziert' });
+    }
+
+    if (!workspaceId) {
+        return res.status(400).json({ error: 'workspaceId ist erforderlich' });
+    }
+
+    try {
+        // Prüfen, ob der Benutzer bereits Zugriff auf den Workspace hat
+        const existing = await pool.query(`
+            SELECT * FROM workspace_users WHERE workspace_id = $1 AND user_id = $2
+        `, [workspaceId, userId]);
+
+        if (existing.rows.length > 0) {
+            return res.status(400).json({ error: 'Benutzer ist bereits Mitglied des Workspaces' });
+        }
+
+        // Benutzer hinzufügen
+        await pool.query(`
+            INSERT INTO workspace_users (workspace_id, user_id, role) VALUES ($1, $2, 'member')
+        `, [workspaceId, userId]);
+
+        res.status(200).json({ message: 'Zugriff gewährt' });
+    } catch (err) {
+        console.error('Fehler beim Hinzufügen zum Workspace:', err);
+        res.status(500).json({ error: 'Fehler beim Hinzufügen zum Workspace' });
+    }
+});
+
 export default router;
+
+async function checkWorkspaceAccess(userId, workspaceId) {
+    const access = await pool.query(`
+        SELECT * FROM workspace_users WHERE workspace_id = $1 AND user_id = $2`,
+        [workspaceId, userId]
+    );
+    return (access.rowCount !== 0);
+}
